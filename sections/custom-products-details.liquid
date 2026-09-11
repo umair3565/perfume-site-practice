@@ -703,8 +703,8 @@
                         data-variant-id="{{ selected_variant.id }}"
                         data-variant-img="{% if selected_variant and selected_variant.image %}{{ selected_variant.image.src | img_url: 'master' }}{% else %}{{ product.featured_image.src | img_url: 'master' }}{% endif %}"
                         data-option-name="{{ option.name }}"
-                        data-option-value="{{ value }}"
-                        title="{{ value }}">
+                        data-option-value="{{ value | escape }}"
+                        title="{{ value | escape }}">
                         <span class="color-swatch" style="background-color: {{ hex_color | default: value }};">
                           <span class="sr-only">{{ value }}</span>
                         </span>
@@ -713,7 +713,7 @@
                       <button
                         class="variant-box {% if forloop.first %}selected{% endif %}"
                         data-option-name="{{ option.name }}"
-                        data-option-value="{{ value }}">
+                        data-option-value="{{ value | escape }}">
                         {{ value }}
                       </button>
                     {% endif %}
@@ -836,8 +836,8 @@
     {% for variant in product.variants %}
     {
       id: {{ variant.id }},
-      quantity: {{ variant.inventory_quantity }},
-      title: "{{ variant.title }}",
+      quantity: {{ variant.inventory_quantity | default: 0 }},
+      title: {{ variant.title | json }},
       options: {{ variant.options | json }},
       price: {{ variant.price }}
     }{% if forloop.last == false %},{% endif %}
@@ -848,21 +848,23 @@
   const optionGroups = section.querySelectorAll('.variant-option');
   const displayQuantity = document.getElementById('displayQuantity');
   
-  let matchedVariant = product.selected_or_first_available_variant;
-  let variantData = variantsArray[0];
+  let matchedVariant = {{ product.selected_or_first_available_variant | json }};
+  let variantData = variantsArray.find(v => v.id === (matchedVariant ? matchedVariant.id : variantsArray[0].id)) || variantsArray[0];
   
   // Update variant info
   function updateSelectedVariants() {
-  
-    const selectedValues = Array.from(optionGroups).map(group => {
-      const selectedBtn = group.querySelector('.variant-box.selected');
-      const value = selectedBtn.dataset.optionValue;
-      return value;
-    });
-  
-    matchedVariant = product.variants.find(variant => 
-    variant.options.every((option, index) => option === selectedValues[index])
-    );
+    if (optionGroups.length === 0) {
+      matchedVariant = product.variants[0];
+    } else {
+      const selectedValues = Array.from(optionGroups).map(group => {
+        const selectedBtn = group.querySelector('.variant-box.selected');
+        return selectedBtn ? selectedBtn.dataset.optionValue : null;
+      });
+    
+      matchedVariant = product.variants.find(variant => 
+        variant.options.every((option, index) => option === selectedValues[index])
+      );
+    }
   
   if (matchedVariant) {
   // shopify dont provide qunatity in variants so we have to take it from the variantData

@@ -31,40 +31,6 @@
         "padding_bottom": 20
       }
     },
-    "custom_announcement_bar_CE9fin": {
-      "type": "custom-announcement-bar",
-      "blocks": {
-        "slide_3gRBhK": {
-          "type": "slide",
-          "settings": {
-            "slide_text": "Receive Complimentary Fragrance on Every Order"
-          }
-        },
-        "slide_aDQM4z": {
-          "type": "slide",
-          "settings": {
-            "slide_text": "Receive Complimentary Fragrance on Every Order"
-          }
-        },
-        "slide_Qk4pmK": {
-          "type": "slide",
-          "settings": {
-            "slide_text": "Receive Complimentary Fragrance on Every Order"
-          }
-        }
-      },
-      "block_order": [
-        "slide_3gRBhK",
-        "slide_aDQM4z",
-        "slide_Qk4pmK"
-      ],
-      "name": "Custom Announcement Bar",
-      "settings": {
-        "show_icons": true,
-        "autoplay_speed": 3,
-        "text_color": "#e8e8e8"
-      }
-    },
     "custom_header_ybWQHw": {
       "type": "custom-header",
       "name": "Custom Header",
@@ -80,10 +46,5 @@
       "settings": {}
     }
   },
-  "order": [
-    "header",
-    "custom_announcement_bar_CE9fin",
-    "custom_header_ybWQHw",
-    "custom_search_wkmDii"
-  ]
+  "order": ["header", "custom_header_ybWQHw", "custom_search_wkmDii"]
 }
